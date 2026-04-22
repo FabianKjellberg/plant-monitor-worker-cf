@@ -13,7 +13,7 @@ type ReadingResponse = {
 
 type GetDeviceReadingsResponse = {
   deviceId: string,
-  readings: SensorReadingsEntity[]
+  readings: ReadingResponse[]
 }
 
 export const getReadingsFromIdHandler = async (c: Context) => {
