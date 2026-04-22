@@ -1,7 +1,7 @@
 import { D1Database } from "@cloudflare/workers-types";
 import { DeviceEntity, DeviceMapper, DeviceRow } from "../models/deviceModel";
 
-export async function GetDeviceFromMac(db: D1Database, macAdress: string): Promise<DeviceEntity | null> {
+export async function getDeviceFromMac(db: D1Database, macAdress: string): Promise<DeviceEntity | null> {
   const res = await db
   .prepare(`
     SELECT * FROM devices
@@ -15,7 +15,7 @@ export async function GetDeviceFromMac(db: D1Database, macAdress: string): Promi
     return res ? DeviceMapper.fromRow(res) : null
 }
 
-export async function CreateDeviceFromMac(db: D1Database, macAdress: string): Promise<DeviceEntity> {
+export async function createDeviceFromMac(db: D1Database, macAdress: string): Promise<DeviceEntity> {
   const id = crypto.randomUUID();
   
   await db

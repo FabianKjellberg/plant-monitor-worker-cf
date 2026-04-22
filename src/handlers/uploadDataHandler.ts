@@ -17,10 +17,10 @@ export const uploadDataHandler = async (c: Context) => {
     const body = await c.req.json<UploadDataBody>();
     const db = await c.env.DB;
 
-    let device = await queries.devices.GetDeviceFromMac(db, body.macAdress);
+    let device = await queries.devices.getDeviceFromMac(db, body.macAdress);
 
     if(!device) {
-      device = await queries.devices.CreateDeviceFromMac(db, body.macAdress);
+      device = await queries.devices.createDeviceFromMac(db, body.macAdress);
     }
 
     const readingId = crypto.randomUUID();
@@ -36,7 +36,7 @@ export const uploadDataHandler = async (c: Context) => {
       readAt: body.readTime,
     }
 
-    await queries.sensorReadings.UploadReadingData(db, readings);
+    await queries.sensorReadings.uploadReadingData(db, readings);
 
     return c.json({message: "success"}, 200)
   }
