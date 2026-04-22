@@ -29,7 +29,16 @@ export const getReadingsFromIdHandler = async (c: Context) => {
 
     const response: GetDeviceReadingsResponse = {
       deviceId,
-      readings,
+      readings: readings.map((reading) => {
+        return {
+          lux: reading.lux,
+          pressure: reading.pressure,
+          humidity: reading.humidity,
+          temperature: reading.temperature,
+          batteryMv: reading.batteryMv,
+          readAt: reading.readAt,
+        }
+      }),
     }  
 
     return c.json(response, 200);
