@@ -25,9 +25,9 @@ export const getReadingsFromRangeHandler = async (c: Context) => {
     const deviceId = c.req.param("deviceId");
     const db: D1Database = c.env.DB;
 
-    console.log(from);
-    console.log(to);
-    console.log(deviceId);
+    console.log(`DEBUG: [${from}]`);
+    console.log(`DEBUG: [${to}]`);
+    console.log(`DEBUG: [${deviceId}]`);
 
     if(!from || !to || !deviceId) return c.json({message: "missing parameters"},400)
 
