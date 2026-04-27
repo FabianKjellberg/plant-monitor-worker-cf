@@ -35,6 +35,15 @@ export const getReadingsFromRangeHandler = async (c: Context) => {
 
     console.log(readings.length)
 
+    const readingsTest = await queries.sensorReadings.getRangeFromDeviceId(
+      db, 
+      "2026-04-26T16:43:53.819333Z", 
+      "2026-04-27T16:43:53.819333Z", 
+      "ce193945-cdb6-4c55-a851-d65ce13a9a08"
+    );
+
+    console.log(readingsTest.length)
+
     const response: GetDeviceReadingsResponse = {
       deviceId: deviceId,
       readings: readings.map((reading) => 
