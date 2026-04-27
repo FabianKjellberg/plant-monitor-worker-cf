@@ -34,6 +34,9 @@ export const getReadingsFromRangeHandler = async (c: Context) => {
     const convertedFrom = toSqliteTimestamp(from);
     const convertedTo = toSqliteTimestamp(to);
 
+    console.log(`DEBUG: [${convertedFrom}]`);
+    console.log(`DEBUG: [${convertedTo}]`);
+
     const readings: SensorReadingsEntity[] = 
       await queries.sensorReadings.getRangeFromDeviceId(db, convertedFrom, convertedTo, deviceId);
 
