@@ -2,6 +2,7 @@ import { Context } from 'hono'
 import { queries } from '../../queries'
 import { SensorReadingsEntity } from '../../models/sensorReadingsModel'
 import { D1Database } from '@cloudflare/workers-types'
+import { toSqliteTimestamp } from '../../helpers/timeHelper'
 
 type ReadingResponse = {
   lux?: number,
@@ -30,8 +31,11 @@ export const getReadingsFromRangeHandler = async (c: Context) => {
 
     if(!from || !to || !deviceId) return c.json({message: "missing parameters"},400)
 
+    const convertedFrom = toSqliteTimestamp(from);
+    const convertedTo = toSqliteTimestamp(to);
+
     const readings: SensorReadingsEntity[] = 
-      await queries.sensorReadings.getRangeFromDeviceId(db, from, to, deviceId);
+      await queries.sensorReadings.getRangeFromDeviceId(db, convertedFrom, convertedTo, deviceId);
 
     console.log(readings.length)
 
