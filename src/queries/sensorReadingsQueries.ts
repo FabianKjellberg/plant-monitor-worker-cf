@@ -43,6 +43,8 @@ export async function getRangeFromDeviceId(db: D1Database, from: string, to: str
   .bind(deviceId, from, to)
   .all<SensorReadingsRow>();
 
+  console.log(res);
+
   if(!res.success) {
     throw new Error("failed fetching sensor data");
   }
