@@ -33,3 +33,19 @@ export async function getDataFromDeviceId(db: D1Database, id: string): Promise<S
 
   return res.results.map((row) => SensorReadingsMapper.fromRow(row));
 }
+
+export async function getRangeFromDeviceId(db: D1Database, from: string, to: string, deviceId: string): Promise<SensorReadingsEntity[]> {
+  const res = await db.prepare(`
+    SELECT * FROM sensor_readings
+    WHERE device_id = ?
+    AND read_at BETWEEN ? AND ?
+  `)
+  .bind(deviceId, from, to)
+  .all<SensorReadingsRow>();
+
+  if(!res.success) {
+    throw new Error("failed fetching sensor data");
+  }
+
+  return res.results.map((row) => SensorReadingsMapper.fromRow(row));
+}
