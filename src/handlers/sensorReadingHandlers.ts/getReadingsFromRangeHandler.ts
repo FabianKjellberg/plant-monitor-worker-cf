@@ -24,6 +24,10 @@ export const getReadingsFromRangeHandler = async (c: Context) => {
     const deviceId = c.req.param("deviceId");
     const db: D1Database = c.env.DB;
 
+    console.log(from);
+    console.log(to);
+    console.log(deviceId);
+
     if(!from || !to || !deviceId) return;
 
     const readings: SensorReadingsEntity[] = 
