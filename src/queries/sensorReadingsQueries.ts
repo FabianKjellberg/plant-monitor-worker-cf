@@ -38,7 +38,7 @@ export async function getRangeFromDeviceId(db: D1Database, from: string, to: str
   const res = await db.prepare(`
     SELECT * FROM sensor_readings
     WHERE device_id = ?
-    AND read_at BETWEEN ? AND ?
+    AND dateTime(read_at) BETWEEN dateTime(?) AND dateTime(?)
   `)
   .bind(deviceId, from, to)
   .all<SensorReadingsRow>();
