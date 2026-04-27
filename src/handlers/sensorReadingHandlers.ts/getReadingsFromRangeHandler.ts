@@ -28,10 +28,12 @@ export const getReadingsFromRangeHandler = async (c: Context) => {
     console.log(to);
     console.log(deviceId);
 
-    if(!from || !to || !deviceId) return;
+    if(!from || !to || !deviceId) return c.json({message: "missing parameters"},400)
 
     const readings: SensorReadingsEntity[] = 
       await queries.sensorReadings.getRangeFromDeviceId(db, from, to, deviceId);
+
+    console.log(readings.length)
 
     const response: GetDeviceReadingsResponse = {
       deviceId: deviceId,
