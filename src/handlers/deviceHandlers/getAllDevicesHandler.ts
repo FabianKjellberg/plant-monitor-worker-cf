@@ -21,6 +21,8 @@ export const getAllDevicesHandler = async (c: Context) => {
           batteryReadAt: deviceEntity.batteryReadAt
         }
     })
+
+    return c.json({devices: responseDevices} as allDevicesResponseBody, 200);
   }
   catch(error) {
     console.error("unable to upload data", error)
