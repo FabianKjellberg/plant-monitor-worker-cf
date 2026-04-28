@@ -1,5 +1,6 @@
 import { D1Database } from "@cloudflare/workers-types";
 import { DeviceEntity, DeviceMapper, DeviceRow } from "../models/deviceModel";
+import { DetailedDeviceEntity, DetailedDeviceMapper, DetailedDeviceRow } from "../models/detailedDeviceModel";
 
 export async function getDeviceFromMac(db: D1Database, macAdress: string): Promise<DeviceEntity | null> {
   const res = await db
@@ -39,4 +40,24 @@ export async function createDeviceFromMac(db: D1Database, macAdress: string): Pr
   if(!device) throw new Error("unable to get newly created device")
 
   return DeviceMapper.fromRow(device);
+}
+
+export async function getAllDetailedDevices(db: D1Database): Promise<DetailedDeviceEntity[]> {
+  const res = await db.prepare(`
+    SELECT d.*, r.read_at, r.battery_mv FROM devices d
+    LEFT JOIN sensor_readings r
+      ON r.id = (
+        SELECT id
+        FROM sensor_readings
+        WHERE device_id = d.id
+        ORDER BY read_at DESC
+        LIMIT 1
+      );
+    `).bind().all<DetailedDeviceRow>()
+
+  if(!res.success) {
+    throw new Error("unable to get devices");
+  }
+
+  return res.results.map((row) => DetailedDeviceMapper.fromRow(row));
 }

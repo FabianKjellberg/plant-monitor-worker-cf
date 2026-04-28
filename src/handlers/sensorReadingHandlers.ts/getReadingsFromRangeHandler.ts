@@ -25,31 +25,13 @@ export const getReadingsFromRangeHandler = async (c: Context) => {
     const deviceId = c.req.param("deviceId");
     const db: D1Database = c.env.DB;
 
-    console.log(`DEBUG: [${from}]`);
-    console.log(`DEBUG: [${to}]`);
-    console.log(`DEBUG: [${deviceId}]`);
-
     if(!from || !to || !deviceId) return c.json({message: "missing parameters"},400)
 
     const convertedFrom = toSqliteTimestamp(from);
     const convertedTo = toSqliteTimestamp(to);
 
-    console.log(`DEBUG: [${convertedFrom}]`);
-    console.log(`DEBUG: [${convertedTo}]`);
-
     const readings: SensorReadingsEntity[] = 
-      await queries.sensorReadings.getRangeFromDeviceId(db, convertedFrom, convertedTo, deviceId);
-
-    console.log(readings.length)
-
-    const readingsTest = await queries.sensorReadings.getRangeFromDeviceId(
-      db, 
-      "2026-04-26T16:43:53.819333Z", 
-      "2026-04-27T16:43:53.819333Z", 
-      "ce193945-cdb6-4c55-a851-d65ce13a9a08"
-    );
-
-    console.log(readingsTest.length)
+      await queries.sensorReadings.getRangeFromDeviceId(db, convertedFrom, convertedTo, deviceId);  
 
     const response: GetDeviceReadingsResponse = {
       deviceId: deviceId,
