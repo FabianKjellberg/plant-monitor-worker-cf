@@ -1,7 +1,7 @@
 import { Context } from "hono"
 import { queries } from "../../queries";
 import { getCookie, setCookie } from "hono/cookie";
-import { hashSessionToken } from "../../util/authUtil";
+import { hashSessionToken } from "../../helpers/authHelper";
 
 export const logoutHandler = async (c: Context) => {
   try{

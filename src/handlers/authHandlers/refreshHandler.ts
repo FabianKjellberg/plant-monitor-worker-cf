@@ -1,7 +1,7 @@
 import { Context } from 'hono'
 import { getCookie, setCookie } from 'hono/cookie';
 import { queries } from '../../queries';
-import { createAccessToken, generateSessionToken, hashSessionToken } from '../../util/authUtil';
+import { createAccessToken, generateSessionToken, hashSessionToken } from '../../helpers/authHelper';
 
 export const refreshHandler = async (c: Context) => {
   try{
