@@ -3,6 +3,7 @@ import { logger } from 'hono/logger'
 import { uploadDataHandler } from './handlers/uploadDataHandler'
 import deviceRoutes from './routes/deviceRoutes'
 import sensorReadingRoutes from './routes/sensorReadingRoutes'
+import authRoutes from './routes/authRoutes'
 
 const app = new Hono()
 
@@ -14,7 +15,10 @@ app.get('/', (c) => {
 
 app.post('/upload', uploadDataHandler);
 
+app.route('/auth', authRoutes);
+
 app.route('/device', deviceRoutes);
+
 app.route('/readings', sensorReadingRoutes);
 
 export default app
