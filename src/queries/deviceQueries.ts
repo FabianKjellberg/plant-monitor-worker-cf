@@ -54,7 +54,7 @@ export async function getAllDetailedDevices(db: D1Database, userId: string): Pro
         WHERE device_id = d.id
         ORDER BY read_at DESC
         LIMIT 1
-      );
+      )
     WHERE ud.user_id = ?
     `).bind(userId).all<DetailedDeviceRow>()
 
