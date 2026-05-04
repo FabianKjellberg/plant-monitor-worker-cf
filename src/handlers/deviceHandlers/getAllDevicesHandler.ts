@@ -9,13 +9,16 @@ type allDevicesResponseBody = {
 export const getAllDevicesHandler = async (c: Context) => {
   try {
     const db = c.env.DB
+    const userId = c.get("userId")
 
-    const deviceEntities = await queries.devices.getAllDetailedDevices(db);
+    if(!userId) return c.json({message: "unable to find username"}, 400)
+
+    const deviceEntities = await queries.devices.getAllDetailedDevices(db, userId);
 
     const responseDevices: DetailedDeviceResponseItem[] = deviceEntities.map(
       (deviceEntity) => {
         return {
-          name: null,
+          device_name: deviceEntity.deviceName,
           deviceId: deviceEntity.deviceId,
           batteryMv: deviceEntity.batteryMv,
           batteryReadAt: deviceEntity.batteryReadAt

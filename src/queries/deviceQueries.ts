@@ -42,9 +42,11 @@ export async function createDeviceFromMac(db: D1Database, macAdress: string): Pr
   return DeviceMapper.fromRow(device);
 }
 
-export async function getAllDetailedDevices(db: D1Database): Promise<DetailedDeviceEntity[]> {
+export async function getAllDetailedDevices(db: D1Database, userId: string): Promise<DetailedDeviceEntity[]> {
   const res = await db.prepare(`
-    SELECT d.*, r.read_at, r.battery_mv FROM devices d
+    SELECT d.*, r.read_at, r.battery_mv, ud.device_name FROM user_devices ud 
+    JOIN devices d
+      ON d.id = ud.device_id
     LEFT JOIN sensor_readings r
       ON r.id = (
         SELECT id
@@ -53,7 +55,8 @@ export async function getAllDetailedDevices(db: D1Database): Promise<DetailedDev
         ORDER BY read_at DESC
         LIMIT 1
       );
-    `).bind().all<DetailedDeviceRow>()
+    WHERE ud.user_id = ?
+    `).bind(userId).all<DetailedDeviceRow>()
 
   if(!res.success) {
     throw new Error("unable to get devices");
