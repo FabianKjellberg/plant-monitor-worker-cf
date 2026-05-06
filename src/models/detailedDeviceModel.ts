@@ -1,5 +1,5 @@
 export type DetailedDeviceResponseItem = {
-    device_name: string | null,
+    deviceName: string | null,
     deviceId: string,
     batteryMv: number | null,
     batteryReadAt: string | null
