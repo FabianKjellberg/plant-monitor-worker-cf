@@ -1,7 +1,6 @@
 import { D1Database } from "@cloudflare/workers-types";
 import { DeviceEntity, DeviceMapper, DeviceRow } from "../models/deviceModel";
 import { DetailedDeviceEntity, DetailedDeviceMapper, DetailedDeviceRow } from "../models/detailedDeviceModel";
-import { UserDeviceEntity, UserDeviceMapper, UserDeviceRow } from "../models/userDeviceModel";
 
 export async function getDeviceFromMac(db: D1Database, macAdress: string): Promise<DeviceEntity | null> {
   const res = await db
@@ -44,8 +43,9 @@ export async function createDeviceFromMac(db: D1Database, macAdress: string): Pr
 }
 
 export async function getAllDetailedDevices(db: D1Database, userId: string): Promise<DetailedDeviceEntity[]> {
+  fix
   const res = await db.prepare(`
-    SELECT d.*, r.read_at, r.battery_mv, ud.device_name FROM user_devices ud 
+    SELECT d.*, r.read_at, r.battery_mv, ud.device_name FROM devices ud 
     JOIN devices d
       ON d.id = ud.device_id
     LEFT JOIN sensor_readings r
@@ -66,39 +66,8 @@ export async function getAllDetailedDevices(db: D1Database, userId: string): Pro
   return res.results.map((row) => DetailedDeviceMapper.fromRow(row));
 }
 
-export async function createUserDevice(db: D1Database, userDevice: UserDeviceEntity): Promise<UserDeviceEntity> {
-  const res = await db
-    .prepare(`
-      INSERT INTO user_devices (id, device_id, user_id, device_name)
-        VALUES(?, ?, ?, ?)
-    `)
-    .bind(
-      userDevice.id, 
-      userDevice.deviceId, 
-      userDevice.userId, 
-      userDevice.deviceName
-    )
-    .run()
-
-  if (!res.success) {
-    throw new Error("unalbe to create device")
-  }
-
-  const device = await db .prepare(`
-    SELECT * FROM user_devices 
-    WHERE id = ?
-  `)
-  .bind(userDevice.id)
-  .first<UserDeviceRow>()
-
-  if(!device) {
-    throw new Error("unalbe to fetch device")
-  }
-
-  return UserDeviceMapper.fromRow(device);
-}
-
 export async function updateUserDeviceName(db: D1Database, deviceId: string, userId: String, name: String): Promise<void> {
+  fix
   await db
   .prepare(`
     UPDATE user_devices
@@ -108,4 +77,15 @@ export async function updateUserDeviceName(db: D1Database, deviceId: string, use
   `)
   .bind(name, userId, deviceId)
   .run();
+}
+
+export async function addDeviceToHome(db: D1Database, deviceId: string, name: string, homeId: string, placeId: string): Promise<void> {
+  await db
+    .prepare(`
+      UPDATE devices
+      SET name = ?, place_id = ?, home_id = ?
+      WHERE deviceId = ?
+    `)
+    .bind(name, placeId, homeId, deviceId)
+    .run();
 }

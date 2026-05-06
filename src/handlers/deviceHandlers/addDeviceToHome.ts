@@ -1,17 +1,18 @@
 import { Context } from 'hono'
 import { queries } from '../../queries';
-import { UserDeviceEntity } from '../../models/userDeviceModel';
 
-type CreateUserDeviceRequestBody = {
+type AddDeviceToHomeRequestBody = {
   mac: string,
   name: string,
+  homeId: string,
+  placeId: string
 }
 
-export const createUserDeviceHandler = async (c: Context) => {
+export const addDeviceToHomeHandler = async (c: Context) => {
   try{
     const db = c.env.DB;
     const userId = c.get("userId");
-    const body = await c.req.json<CreateUserDeviceRequestBody>()
+    const body = await c.req.json<AddDeviceToHomeRequestBody>()
 
     if(!body.mac || !body.name) return c.json({message: "body incomplete"}, 400);
 
@@ -23,18 +24,15 @@ export const createUserDeviceHandler = async (c: Context) => {
         device = await queries.devices.createDeviceFromMac(db, body.mac)
     }
 
-    if(!device) return c.json({message: "unable to create device"}, 400);
-
-    const userDevice: UserDeviceEntity = {
-      id: crypto.randomUUID(),
-      deviceId: device.id,
-      userId,
-      deviceName: body.name,
+    if(device.homeId != undefined) {
+      return c.json({message: "device already assigned to a home"}, 400);
     }
 
-    await queries.devices.createUserDevice(db, userDevice);
+    if(!device) return c.json({message: "unable to create device"}, 400);
 
-    return c.json({message: "user device created successfully"},200);
+    await queries.devices.addDeviceToHome(db, device.id, body.name, body.homeId, body.placeId);
+
+    return c.json({message: "user home added to device successfully"},200);
   }
   catch(e) {
     console.error("unable to upload data", e)

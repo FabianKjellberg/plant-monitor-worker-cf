@@ -8,6 +8,7 @@ type allDevicesResponseBody = {
 
 export const getAllDevicesHandler = async (c: Context) => {
   try {
+    fix
     const db = c.env.DB
     const userId = c.get("userId")
 

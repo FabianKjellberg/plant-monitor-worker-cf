@@ -1,6 +1,7 @@
 export type SensorReadingsEntity = {
   id: string,
   deviceId: string,
+  placeId?: string,
   lux?: number,
   pressure?: number,
   humidity?: number,
@@ -13,6 +14,7 @@ export type SensorReadingsEntity = {
 export type SensorReadingsRow = {
   id: string,
   device_id: string,
+  place_id?: string,
   lux?: number,
   pressure?: number,
   humidity?: number,
@@ -27,6 +29,7 @@ export const SensorReadingsMapper = {
     return {
       id: readings.id,
       deviceId: readings.device_id,
+      placeId: readings.place_id,
       lux: readings.lux,
       pressure: readings.pressure,
       humidity: readings.humidity,
@@ -40,6 +43,7 @@ export const SensorReadingsMapper = {
     return {
       id: readings.id,
       device_id: readings.deviceId,
+      place_id: readings.placeId,
       lux: readings.lux,
       pressure: readings.pressure,
       humidity: readings.humidity,
