@@ -17,6 +17,8 @@ export const getAllDevicesHandler = async (c: Context) => {
 
     const responseDevices: DetailedDeviceResponseItem[] = deviceEntities.map(
       (deviceEntity) => {
+        console.log(deviceEntity.deviceName);
+        
         return {
           device_name: deviceEntity.deviceName,
           deviceId: deviceEntity.deviceId,
