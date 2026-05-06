@@ -7,7 +7,7 @@ const deviceRoutes = new Hono();
 
 // outdated
 deviceRoutes.get("/all",authMiddleware, getAllDevicesHandler);
-deviceRoutes.post("/user_device/create", authMiddleware, createUserDeviceHandler);
+deviceRoutes.post("/user-device/create", authMiddleware, createUserDeviceHandler);
 
 
 export default deviceRoutes;
