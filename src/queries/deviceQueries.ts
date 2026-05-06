@@ -1,6 +1,7 @@
 import { D1Database } from "@cloudflare/workers-types";
 import { DeviceEntity, DeviceMapper, DeviceRow } from "../models/deviceModel";
 import { DetailedDeviceEntity, DetailedDeviceMapper, DetailedDeviceRow } from "../models/detailedDeviceModel";
+import { UserDeviceEntity, UserDeviceMapper, UserDeviceRow } from "../models/userDeviceModel";
 
 export async function getDeviceFromMac(db: D1Database, macAdress: string): Promise<DeviceEntity | null> {
   const res = await db
@@ -63,4 +64,36 @@ export async function getAllDetailedDevices(db: D1Database, userId: string): Pro
   }
 
   return res.results.map((row) => DetailedDeviceMapper.fromRow(row));
+}
+
+export async function createUserDevice(db: D1Database, userDevice: UserDeviceEntity): Promise<UserDeviceEntity> {
+  const res = await db
+    .prepare(`
+      INSERT INTO user_devices (id, device_id, user_id, device_name)
+        VALUES(?, ?, ?, ?)
+    `)
+    .bind(
+      userDevice.id, 
+      userDevice.deviceId, 
+      userDevice.userId, 
+      userDevice.deviceName
+    )
+    .run()
+
+  if (!res.success) {
+    throw new Error("unalbe to create device")
+  }
+
+  const device = await db .prepare(`
+    SELECT * FROM user_devices 
+    WHERE id = ?
+  `)
+  .bind(userDevice.id)
+  .first<UserDeviceRow>()
+
+  if(!device) {
+    throw new Error("unalbe to fetch device")
+  }
+
+  return UserDeviceMapper.fromRow(device);
 }
