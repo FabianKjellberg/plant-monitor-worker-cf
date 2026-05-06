@@ -97,3 +97,15 @@ export async function createUserDevice(db: D1Database, userDevice: UserDeviceEnt
 
   return UserDeviceMapper.fromRow(device);
 }
+
+export async function updateUserDeviceName(db: D1Database, deviceId: string, userId: String, name: String): Promise<void> {
+  await db
+  .prepare(`
+    UPDATE user_devices
+    SET device_name = ?
+    WHERE user_id = ?
+    AND device_id = ?
+  `)
+  .bind(name, userId, deviceId)
+  .run();
+}

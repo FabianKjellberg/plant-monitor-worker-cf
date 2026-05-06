@@ -2,12 +2,20 @@ import { Hono } from "hono";
 import { getAllDevicesHandler } from "../handlers/deviceHandlers/getAllDevicesHandler";
 import { authMiddleware } from "../middleware/authMiddleware";
 import {createUserDeviceHandler} from "../handlers/deviceHandlers/createUserDeviceHandler"
+import { updateDeviceNameHandler } from "../handlers/deviceHandlers/updateDeviceNameHandler";
 
 const deviceRoutes = new Hono();
 
-// outdated
+//get all users devices
 deviceRoutes.get("/all",authMiddleware, getAllDevicesHandler);
+
+//create a connection between a device and a user
 deviceRoutes.post("/user-device/create", authMiddleware, createUserDeviceHandler);
+
+//update name of a device
+deviceRoutes.put("/name", authMiddleware, updateDeviceNameHandler)
+
+
 
 
 export default deviceRoutes;
