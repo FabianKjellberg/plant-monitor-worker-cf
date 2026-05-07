@@ -5,7 +5,7 @@ type AddDeviceToHomeRequestBody = {
   mac: string,
   name: string,
   homeId: string,
-  placeId: string
+  placeId?: string
 }
 
 export const addDeviceToHomeHandler = async (c: Context) => {

@@ -2,11 +2,10 @@ import { D1Database } from "@cloudflare/workers-types";
 import { SensorReadingsEntity, SensorReadingsMapper, SensorReadingsRow } from "../models/sensorReadingsModel";
 
 export async function uploadReadingData(db: D1Database, readings: SensorReadingsEntity): Promise<void> {
-  await db.prepare(`
+  const insertReading = db.prepare(`
     INSERT INTO sensor_readings(id, device_id, lux, pressure, humidity, temperature, battery_mv, read_at)
-      VALUES(?, ?, ?, ?, ?, ?, ?, ?)
-  `)
-  .bind(
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(
     readings.id,
     readings.deviceId,
     readings.lux,
@@ -15,8 +14,19 @@ export async function uploadReadingData(db: D1Database, readings: SensorReadings
     readings.temperature,
     readings.batteryMv,
     readings.readAt,
-  )
-  .run();
+  );
+
+  const updateDevice = db.prepare(`
+    UPDATE devices
+    SET last_battery_mv = ?, last_battery_read_at = ?
+    WHERE id = ?
+  `).bind(
+    readings.batteryMv, 
+    readings.readAt, 
+    readings.deviceId
+  );
+
+  await db.batch([insertReading, updateDevice]);
 }
 
 export async function getDataFromDeviceId(db: D1Database, id: string): Promise<SensorReadingsEntity[]> {

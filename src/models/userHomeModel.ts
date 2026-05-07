@@ -3,13 +3,14 @@ export enum UserHomeRole {
     MEMBER = "member",
     VIEWER = "viewer",
     GUEST = "guest",
+    NONE = "none",
 }
 
 export const parseRole = (role: string): UserHomeRole => {
-    return Object.values(UserHomeRole).includes(role as UserHomeRole) 
-      ? (role as UserHomeRole) 
-      : UserHomeRole.GUEST;
-  };
+  return Object.values(UserHomeRole).includes(role as UserHomeRole) 
+    ? (role as UserHomeRole) 
+    : UserHomeRole.NONE;
+};
 
 export type UserHomeEntity = {
     id: string,

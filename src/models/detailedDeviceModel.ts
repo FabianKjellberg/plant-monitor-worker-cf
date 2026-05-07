@@ -1,47 +1,51 @@
-export type DetailedDeviceResponseItem = {
-    deviceName: string | null,
-    deviceId: string,
-    batteryMv: number | null,
-    batteryReadAt: string | null
+export type DetailedDeviceHome = {
+  name: string,
+  id: string,
+  devices: DetailedDevice[]
 }
 
-export type DetailedDeviceEntity = {
-  deviceId: string;
-  macAdress: string;
-  createdAt: string;
-  batteryMv: number | null;
-  batteryReadAt: string | null;
-  deviceName: string
+export type DetailedDevice = {
+  id: string,
+  name?: string,
+  batteryMv?: number,
+  batteryReadAt?: string,
+  placeId?: string,
 }
 
 export type DetailedDeviceRow = {
-  id: string;
-  mac_addr: string;
-  created_at: string;
-  battery_mv: number | null; 
-  read_at: string | null;
-  device_name: string
+  battery_mv?: number,
+  battery_read_at?: string,
+  home_name: string, 
+  home_id: string,
+  device_id?: string,
+  device_name?: string,
+  place_id?: string,
 }
 
 export const DetailedDeviceMapper = {
-  fromRow: (device: DetailedDeviceRow): DetailedDeviceEntity => {
-    return {
-      deviceId: device.id,
-      macAdress: device.mac_addr,
-      createdAt: device.created_at,
-      batteryMv: device.battery_mv,
-      batteryReadAt: device.read_at,
-      deviceName: device.device_name
-    }
-  },
-  toRow: (device: DetailedDeviceEntity): DetailedDeviceRow => {
-    return {
-      id: device.deviceId,
-      mac_addr: device.macAdress,
-      created_at: device.createdAt,
-      battery_mv: device.batteryMv,
-      read_at: device.batteryReadAt,
-      device_name: device.deviceName
-    }
+  fromRows: (rows :DetailedDeviceRow[]): DetailedDeviceHome[] => {
+    const homeMap: Record<string, DetailedDeviceHome> = {};
+
+    rows.forEach((row) => {
+      if(!homeMap[row.home_id]) {
+        homeMap[row.home_id] = {
+          id: row.home_id,
+          name: row.home_name,
+          devices: []
+        }
+      }
+      
+      if(row.device_id) {
+        homeMap[row.home_id].devices.push({
+          id: row.device_id,
+          name: row.device_name,
+          batteryMv: row.battery_mv,
+          batteryReadAt: row.battery_read_at,
+          placeId: row.place_id,
+        })
+      }
+    })
+    
+    return Object.values(homeMap);
   }
 }

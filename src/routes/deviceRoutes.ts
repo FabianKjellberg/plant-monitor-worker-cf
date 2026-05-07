@@ -3,6 +3,7 @@ import { getAllDevicesHandler } from "../handlers/deviceHandlers/getAllDevicesHa
 import { authMiddleware } from "../middleware/authMiddleware";
 import { addDeviceToHomeHandler } from "../handlers/deviceHandlers/addDeviceToHome"
 import { updateDeviceNameHandler } from "../handlers/deviceHandlers/updateDeviceNameHandler";
+import { asignDeviceHandler } from "../handlers/deviceHandlers/asignDeviceHandler";
 
 const deviceRoutes = new Hono();
 
@@ -12,10 +13,10 @@ deviceRoutes.get("/all",authMiddleware, getAllDevicesHandler);
 //create a connection between a device and a user
 deviceRoutes.put("/device/home", authMiddleware, addDeviceToHomeHandler);
 
-//update name of a device
+//update name of a device.
 deviceRoutes.put("/name", authMiddleware, updateDeviceNameHandler)
 
-
-
+//asign device to a place.
+deviceRoutes.put("/place", authMiddleware, asignDeviceHandler)
 
 export default deviceRoutes;

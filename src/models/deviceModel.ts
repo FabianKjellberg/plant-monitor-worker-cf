@@ -1,3 +1,14 @@
+export enum DeviceType {
+  POT = "pot",
+  UNKNOWN = "unknown"
+}
+
+export const parseDeviceType = (type: string | undefined): DeviceType => {
+  return Object.values(DeviceType).includes(type as DeviceType) 
+    ? (type as DeviceType) 
+    : DeviceType.UNKNOWN;
+};
+
 export type DeviceEntity = {
   id: string,
   macAdress: string,
@@ -5,6 +16,7 @@ export type DeviceEntity = {
   homeId?: string,
   placeId?: string,
   createdAt?: string,
+  type: DeviceType,
 }
 
 export type DeviceRow = {
@@ -14,6 +26,7 @@ export type DeviceRow = {
   home_id?: string,
   place_id?: string,
   created_at?: string,
+  type: string,
 }
 
 export const DeviceMapper = {
@@ -25,6 +38,7 @@ export const DeviceMapper = {
       homeId: device.home_id,
       placeId: device.place_id,
       createdAt: device.created_at,
+      type: parseDeviceType(device.type),
     }
   },
   toRow: (device: DeviceEntity): DeviceRow => {
@@ -35,6 +49,7 @@ export const DeviceMapper = {
       home_id: device.homeId,
       place_id: device.placeId,
       created_at: device.createdAt,
+      type: device.type,
     }
   }
 }

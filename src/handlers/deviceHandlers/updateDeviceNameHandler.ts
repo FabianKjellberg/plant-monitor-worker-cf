@@ -1,5 +1,6 @@
 import {Context} from 'hono'
 import { queries } from '../../queries'
+import { UserHomeRole } from '../../models/userHomeModel'
 
 type UpdateDeviceNameRequestBody = {
   deviceId: string,
@@ -14,7 +15,13 @@ export const updateDeviceNameHandler = async (c: Context) => {
 
     if (!body.deviceId || !body.name || !userId) return c.json({message: "incomplete body paramteres"}, 400);
 
-    await queries.devices.updateUserDeviceName(db, body.deviceId, userId, body.name);
+    const role = await queries.home.getRoleFromDeviceId(db, body.deviceId, userId);
+
+    if(role != UserHomeRole.ADMIN && role != UserHomeRole.MEMBER) {
+      return c.json({message: "forbidden action"}, 403);
+    }
+
+    await queries.devices.updateUserDeviceName(db, body.deviceId, body.name);
 
     return c.json(200);
   }
