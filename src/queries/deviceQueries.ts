@@ -76,7 +76,7 @@ export async function updateDeviceName(db: D1Database, deviceId: string, name: S
   .prepare(`
     UPDATE devices
     SET name = ?
-    WHERE device_id = ?
+    WHERE id = ?
   `)
   .bind(name, deviceId)
   .run();
