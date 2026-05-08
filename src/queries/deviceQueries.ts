@@ -51,6 +51,7 @@ export async function getAllDetailedDevices(db: D1Database, userId: string): Pro
       d.id AS device_id,
       d.name AS device_name,
       d.place_id AS place_id,
+      d.device_type AS device_type,
       h.id AS home_id,
       h.name AS home_name
     FROM user_home AS uh
@@ -70,10 +71,10 @@ export async function getAllDetailedDevices(db: D1Database, userId: string): Pro
   return DetailedDeviceMapper.fromRows(res.results);
 }
 
-export async function updateUserDeviceName(db: D1Database, deviceId: string, name: String): Promise<void> {
+export async function updateDeviceName(db: D1Database, deviceId: string, name: String): Promise<void> {
   await db
   .prepare(`
-    UPDATE device
+    UPDATE devices
     SET name = ?
     WHERE device_id = ?
   `)

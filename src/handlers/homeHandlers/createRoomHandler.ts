@@ -6,7 +6,7 @@ import { DetailedHomeRoom } from "../../models/detailedHomeModel";
 type CreateRoomRequestBody = {
   homeId: string
   name: string,
-  icon: string,
+  icon?: string,
 }
 
 type CreateRoomResponseBody = {

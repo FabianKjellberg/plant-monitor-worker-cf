@@ -1,3 +1,5 @@
+import { DeviceType, parseDeviceType } from "./deviceModel"
+
 export type DetailedDeviceHome = {
   name: string,
   id: string,
@@ -10,6 +12,7 @@ export type DetailedDevice = {
   batteryMv?: number,
   batteryReadAt?: string,
   placeId?: string,
+  deviceType: DeviceType
 }
 
 export type DetailedDeviceRow = {
@@ -20,6 +23,7 @@ export type DetailedDeviceRow = {
   device_id?: string,
   device_name?: string,
   place_id?: string,
+  device_type?: string,
 }
 
 export const DetailedDeviceMapper = {
@@ -42,6 +46,7 @@ export const DetailedDeviceMapper = {
           batteryMv: row.battery_mv,
           batteryReadAt: row.battery_read_at,
           placeId: row.place_id,
+          deviceType: parseDeviceType(row.device_type)
         })
       }
     })

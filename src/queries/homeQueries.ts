@@ -163,7 +163,7 @@ export const createRoom = async (
   db: D1Database, 
   homeId: string, 
   name: string, 
-  icon: string
+  icon?: string
 ): Promise<RoomEntity> => {
   const id = crypto.randomUUID();
   
@@ -193,7 +193,7 @@ export const createPlace = async (
   db: D1Database, 
   roomId: string, 
   name: string, 
-  icon: string
+  icon?: string
 ): Promise<PlaceEntity> => {
   const id = crypto.randomUUID();
   

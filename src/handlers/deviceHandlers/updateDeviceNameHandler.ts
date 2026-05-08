@@ -21,7 +21,7 @@ export const updateDeviceNameHandler = async (c: Context) => {
       return c.json({message: "forbidden action"}, 403);
     }
 
-    await queries.devices.updateUserDeviceName(db, body.deviceId, body.name);
+    await queries.devices.updateDeviceName(db, body.deviceId, body.name);
 
     return c.json(200);
   }
