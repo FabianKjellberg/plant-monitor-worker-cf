@@ -22,6 +22,8 @@ export const createRoomHandler = async (c: Context) => {
 
     const role = await queries.home.getRoleFromHomeId(db, body.homeId, userId);
 
+    console.log(role)
+
     if(role != UserHomeRole.ADMIN && role != UserHomeRole.MEMBER) 
       return c.json({message: "forbidden action"}, 403);
 
