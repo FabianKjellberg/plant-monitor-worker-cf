@@ -28,6 +28,7 @@ export const uploadDataHandler = async (c: Context) => {
     const readings: SensorReadingsEntity = {
       id: readingId,
       deviceId: device.id,
+      placeId: device.placeId,
       lux: body.lux,
       pressure: body.pressure,
       humidity: body.humidity,

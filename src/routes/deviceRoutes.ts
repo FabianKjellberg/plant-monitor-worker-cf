@@ -10,8 +10,8 @@ const deviceRoutes = new Hono();
 //get all users devices
 deviceRoutes.get("/all",authMiddleware, getAllDevicesHandler);
 
-//create a connection between a device and a user
-deviceRoutes.put("/device/home", authMiddleware, addDeviceToHomeHandler);
+//create a connection between a device and a home
+deviceRoutes.put("/home", authMiddleware, addDeviceToHomeHandler);
 
 //update name of a device.
 deviceRoutes.put("/name", authMiddleware, updateDeviceNameHandler)
