@@ -4,7 +4,7 @@ import { SensorReadingsEntity, SensorReadingsMapper, SensorReadingsRow } from ".
 export async function uploadReadingData(db: D1Database, readings: SensorReadingsEntity): Promise<void> {
   const insertReading = db.prepare(`
     INSERT INTO sensor_readings(id, device_id, place_id, lux, pressure, humidity, temperature, battery_mv, read_at)
-    VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     readings.id,
     readings.deviceId,
