@@ -1,15 +1,6 @@
 import { Context } from "hono"
-import { SensorReadingsEntity } from "../../models/sensorReadingsModel"
+import { ReadingResponse, SensorReadingsEntity } from "../../models/sensorReadingsModel"
 import { queries } from "../../queries"
-
-type ReadingResponse = {
-  lux?: number,
-  pressure?: number,
-  humidity?: number,
-  temperature?: number,
-  batteryMv?: number,
-  readAt: string,
-}
 
 type GetDeviceReadingsResponse = {
   deviceId: string,

@@ -1,3 +1,12 @@
+export type ReadingResponse = {
+  lux?: number,
+  pressure?: number,
+  humidity?: number,
+  temperature?: number,
+  batteryMv?: number,
+  readAt: string,
+}
+
 export type SensorReadingsEntity = {
   id: string,
   deviceId: string,

@@ -60,3 +60,20 @@ export async function getRangeFromDeviceId(db: D1Database, from: string, to: str
 
   return res.results.map((row) => SensorReadingsMapper.fromRow(row));
 }
+
+export async function getDataForPlaceId(
+  db: D1Database, 
+  placeId: string
+): Promise<SensorReadingsEntity[]> {
+  
+  const res = await db.prepare(`
+    SELECT * FROM sensor_readings
+    WHERE place_id = ?
+  `)
+  .bind(placeId)
+  .all<SensorReadingsRow>()
+  
+  if(!res.success) throw new Error("failed sensor readings from db")
+
+  return res.results.map(row => SensorReadingsMapper.fromRow(row))
+}
