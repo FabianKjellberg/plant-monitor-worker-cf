@@ -218,3 +218,28 @@ export const createPlace = async (
 
   return PlaceMapper.fromRow(roomRow);
 }
+
+export async function deleteRoom(db: D1Database, roomId: string): Promise<void> {
+  await db
+  .prepare(/* sql */`
+    DELETE FROM room 
+    WHERE id = ?
+  `)
+  .bind(roomId)
+  .run()
+}
+
+export async function renameRoom(
+  db: D1Database, 
+  roomId: string, 
+  name: string
+): Promise<void> {
+  await db
+  .prepare(/* sql */`
+    UPDATE room 
+    SET name = ?
+    WHERE id = ?
+  `)
+  .bind(name, roomId)
+  .run()
+}
