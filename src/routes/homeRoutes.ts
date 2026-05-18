@@ -16,6 +16,6 @@ homeRoutes.post("/place/create", authMiddleware, createPlaceHandler);
 
 homeRoutes.put("/room/rename", authMiddleware, renameRoomHandler);
 
-homeRoutes.delete("/room", authMiddleware, deleteRoomHandler);
+homeRoutes.delete("/room/{roomId}", authMiddleware, deleteRoomHandler);
 
 export default homeRoutes;
