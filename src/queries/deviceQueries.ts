@@ -113,3 +113,14 @@ export async function asignDeviceToPlace(
     .bind(placeId, deviceId)
     .run();
 }
+
+export async function unassignDevice(db: D1Database, deviceId: String): Promise<void> {
+  await db
+  .prepare(/* sql */`
+    UPDATE devices
+    SET place_id = null, home_id = null
+    WHERE id = ?
+  `)
+  .bind(deviceId)
+  .run()
+}

@@ -4,6 +4,7 @@ import { authMiddleware } from "../middleware/authMiddleware";
 import { addDeviceToHomeHandler } from "../handlers/deviceHandlers/addDeviceToHome"
 import { updateDeviceNameHandler } from "../handlers/deviceHandlers/updateDeviceNameHandler";
 import { asignDeviceHandler } from "../handlers/deviceHandlers/asignDeviceHandler";
+import { deleteDeviceHandler } from "../handlers/deviceHandlers/deleteDeviceHandler";
 
 const deviceRoutes = new Hono();
 
@@ -18,5 +19,8 @@ deviceRoutes.put("/name", authMiddleware, updateDeviceNameHandler)
 
 //asign device to a place.
 deviceRoutes.put("/place", authMiddleware, asignDeviceHandler)
+
+//forgets a device
+deviceRoutes.delete("/:deviceId", authMiddleware, deleteDeviceHandler)
 
 export default deviceRoutes;

@@ -229,6 +229,16 @@ export async function deleteRoom(db: D1Database, roomId: string): Promise<void> 
   .run()
 }
 
+export async function deletePlace(db: D1Database, placeId: string): Promise<void> {
+  await db
+  .prepare(/* sql */`
+    DELETE FROM place 
+    WHERE id = ?
+  `)
+  .bind(placeId)
+  .run()
+}
+
 export async function renameRoom(
   db: D1Database, 
   roomId: string, 
@@ -241,5 +251,20 @@ export async function renameRoom(
     WHERE id = ?
   `)
   .bind(name, roomId)
+  .run()
+}
+
+export async function renamePlace(
+  db: D1Database, 
+  placeId: string, 
+  name: string
+): Promise<void> {
+  await db
+  .prepare(/* sql */`
+    UPDATE place 
+    SET name = ?
+    WHERE id = ?
+  `)
+  .bind(name, placeId)
   .run()
 }
