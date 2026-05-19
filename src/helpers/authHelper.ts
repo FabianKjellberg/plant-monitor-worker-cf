@@ -40,6 +40,6 @@ export async function createAccessToken(userId: string, jwtSecret: string): Prom
     })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('15m')
+    .setExpirationTime('15s')
     .sign(secret)
 }
